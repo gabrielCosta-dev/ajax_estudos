@@ -16,8 +16,9 @@
                 ajax.open('GET', url)
                 console.log(ajax)
             }) */
-			
             function requisitarPagina(url) {
+				let conteudo = document.getElementById('conteudo')
+				conteudo.innerHTML = ''
 
 				//Inclusão GIF
 				if (!document.getElementById('loading')) {
@@ -28,13 +29,12 @@
 					imgLoading.className = 'rounded mx-auto d-block'
 
 					//Inclusão imgLoading
-					let conteudo = document.getElementById('conteudo')
 					conteudo.appendChild(imgLoading)
 				}
 				
 
                 let ajax = new XMLHttpRequest()
-
+				
 				//REQUISIÇÃO NÃO INICIADA, STATE = 0
 				//console.log(ajax.readyState)
                 ajax.open('GET', url)
@@ -43,9 +43,18 @@
 				//console.log(ajax.readyState)
 				
 				ajax.onreadystatechange = ()=>{
-					if(ajax.readyState == 4){
-						console.log('Requisição finalizada com sucesso');
-						document.getElementById('loading').remove()
+					//console.log('O status da requisição é:' + ajax.status)
+					if(ajax.readyState == 4  && ajax.status == 200){
+						//document.getElementById('loading').remove()
+						conteudo.innerHTML = ajax.responseText;
+						//console.log('Requisição finalizada com sucesso');
+					};
+
+					if(ajax.readyState == 4  && ajax.status == 404){
+						//document.getElementById('loading').remove()
+						conteudo.innerHTML = '<p>Requisição finalizada, porém o recurso solicitado não foi encontrado</p>';
+						conteudo.className = 'text-danger mx-auto p-5'
+						//console.log('Requisição finalizada, porém o recurso solicitado não foi encontrado');
 					};
 				}
 
